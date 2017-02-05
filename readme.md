@@ -11,6 +11,7 @@ To run the project locally:
 * create database, user, grant perms to user  
 * run migrations `./manage.py migrate` 
 * create superuser `./manage.py createsuperuser`
+* (optional) load initial fixtures `./manage.py loaddata fixtures/employees.json`
 * run dev server `./manage.py runserver`
 
 **Development local_settings.py example**
