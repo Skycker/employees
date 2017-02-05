@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Список сотрудников компании</h1>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form action="{% url "web_site:employees" %}" method="GET">
+                <div class="form-group">
+                    <label for="department">Отдел:</label>
+                    <select class="form-control" id="department" name="department">
+                        <option {% if not current_department %}selected{% endif %} value>Выберите отдел</option>
+                        {% for d in departments %}
+                            <option {% if current_department == d.id|stringformat:"i" %}selected{% endif %}
+                                    value="{{ d.id }}">{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="checkbox">
+                    <label><input type="checkbox" {% if is_working %}checked{% endif %} name="is_working">Работет сейчас</label>
+                </div>
+                <button type="submit" class="btn btn-default">Применить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top: 30px">
+        <div class="col-lg-12">
+            {% if employees %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчетсво</th>
+                        <th>Отдел</th>
+                        <th>Должность</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for e in employees %}
+                        <tr>
+                            <td>
+                                <a href="{{ e.get_absolute_url }}">{{ e.surname }}</a>
+                            </td>
+                            <td>{{ e.name }}</td>
+                            <td>{{ e.patronymic }}</td>
+                            <td>{{ e.department.title }}</td>
+                            <td>{{ e.position }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Нет подходящих под условия фильтрации сотрудников</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="{% url "web_site:employees" %}?page={{ page_obj.previous_page_number }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li>
+                <span class="page-current">
+                    Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                </span>
+            </li>
+            {% if page_obj.has_next %}
+                <li>
+                    <a href="{% url "web_site:employees" %}?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+{% endblock %}

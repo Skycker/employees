@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Информация о сотруднике</h1>
+
+    <a href="{% url "web_site:employees" %}">Назад к списку сотрудников</a>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <p>{{ employee }}</p>
+            <p>Дата рождения: {{ employee.birthday }}</p>
+            <p>Электронная почта: {{ employee.email|default:"-" }}</p>
+            <p>Телефон: {{ employee.phone|default:"-" }}</p>
+            <p>Дата поступления на работу: {{ employee.job_start_date }}</p>
+            <p>Дата окончания работы: {{ employee.job_end_date|default:"по настоящее время" }}</p>
+            <p>Должность: {{ employee.position }}</p>
+        </div>
+    </div>
+{% endblock %}

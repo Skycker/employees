@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Алфавитный указатель сотрудников</h1>
+
+    {% if groups %}
+        <ul class="nav nav-tabs">
+            {% for i in groups %}
+                <li {% if forloop.counter == 1 %}class="active"{% endif %}>
+                    <a data-toggle="tab" href="#group-{{ forloop.counter }}">
+                        {{ i.first_letter }} - {{ i.last_letter }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="tab-content" style="padding-top: 30px">
+            {% for i in groups %}
+                <div id="group-{{ forloop.counter }}"
+                     class="tab-pane fade {% if forloop.counter == 1 %}in active{% endif %}">
+                    <ul>
+                        {% for employee in i.employees %}
+                            <li>
+                                <a href="{{ employee.get_absolute_url }}">{{ employee }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>
+            В бд недостаточно данных для построения алфавитного указателя
+        </p>
+    {% endif %}
+{% endblock %}
